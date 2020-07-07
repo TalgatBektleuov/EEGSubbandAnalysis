@@ -14,33 +14,12 @@ from pathlib import Path
 def IAF(age):
     return 11.95 - 0.053 * age
 
-
-# Implementing function to calculate ERD
-def ERD(f, cal):
-    return 100 * (cal - f) / cal
-
-
 electrodes = {"central": ['EEG F3-Cz', 'EEG F4-Cz', 'EEG Fz-Cz', 'EEG C3-Cz', 'EEG C4-Cz', 'EEG P3-Cz', 'EEG P4-Cz',
                           'EEG Pz-Cz'],
               "frontal": ['EEG Fp1-Cz', 'EEG Fp2-Cz', 'EEG F7-Cz', 'EEG F3-Cz', 'EEG Fz-Cz', 'EEG F4-Cz', 'EEG F8-Cz'],
               "temporal": ['EEG T3-Cz', 'EEG T4-Cz', 'EEG T5-Cz', 'EEG T6-Cz']}
 
-CONFIG = yaml.load(open("subjects.yaml", "r"))
-
-WAVES = ["L1A", "L2A", "UA", "Th"]
-
-
-def remove_outliers(erd):
-    quant25 = np.quantile(erd, 0.25)
-    quant75 = np.quantile(erd, 0.75)
-    erd[(erd < quant25) | (erd > quant75)] = np.median(erd)
-    return erd
-
-
-load_dir = Path(__file__).parent.parent / "data"
-obg_dir = Path(__file__).parent.parent / "obj_dumps"
-(obg_dir / "subject1").mkdir(parents=True, exist_ok=True)
-curr_dir = load_dir / "subject1" / "music"
+CONFIG = yaml.load(open("../subjects.yaml", "r"))
 
 #file names
 cal_name = "NabilaHosny.EyesClosed.Control.edf"
@@ -71,10 +50,7 @@ IAF_p = IAF(CONFIG["subjects"]["subject1"])
 
 # Getting L1A, L2A, UA, Theta waves from eyes closed using FIR filtering. Also we take mean signal from all
 # channels
-print("L1A is ")
-print({'L1A': mne.filter.filter_data(data=np.mean(experiment_filtered.get_data(), axis=0),
-                                                      l_freq=IAF_p - 4, h_freq=IAF_p - 2, sfreq=sfreq,
-                                                      method="fir")})
+
 eyes_sub_bands = {
     'L1A': mne.filter.filter_data(data=np.mean(eyes_filtered.get_data(), axis=0), l_freq=IAF_p - 4,
                                   h_freq=IAF_p - 2, sfreq=sfreq, method="fir"),
