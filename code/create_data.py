@@ -109,8 +109,7 @@ print(eyes_sub_bands_ready)
 erd_mean_ready={}
 for band in WAVES:
     erd_mean_ready[band]=ERD(experiment_sub_bands_ready[band],eyes_sub_bands_ready[band])
-erd_mean_ready["Alpha"]=(erd_mean_ready["L1A"]+erd_mean_ready["L2A"]+erd_mean_ready["UA"])/3;
-
+    
 print("Total ERD values")
 print(erd_mean_ready)
 
